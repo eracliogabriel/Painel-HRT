@@ -1,8 +1,5 @@
 package MODEL;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.time.LocalTime;
 
 public class Dados {
 	
@@ -13,10 +10,10 @@ public class Dados {
 	private String nomeCompleto;
 	private String status;
 	private String local;
-	private LocalTime inicioPrev;
-	private LocalTime inicioCir;
-	private LocalTime fimCir;
-	private LocalTime saidaPrev;
+	private String inicioPrev;
+	private String inicioCir;
+	private String fimCir;
+	private String saidaPrev;
 	
 	//Metodo Get e Set
 	public Long getId() {
@@ -55,28 +52,28 @@ public class Dados {
 	public void setLocal(String local) {
 		this.local = local;
 	}
-	public LocalTime getInicioPrev() {
+	public String getInicioPrev() {
 		return inicioPrev;
 	}
-	public void setInicioPrev(LocalTime inicioPrev) {
+	public void setInicioPrev(String inicioPrev) {
 		this.inicioPrev = inicioPrev;
 	}
-	public LocalTime getInicioCir() {
+	public String getInicioCir() {
 		return inicioCir;
 	}
-	public void setInicioCir(LocalTime inicioCir) {
+	public void setInicioCir(String inicioCir) {
 		this.inicioCir = inicioCir;
 	}
-	public LocalTime getFimCir() {
+	public String getFimCir() {
 		return fimCir;
 	}
-	public void setFimCir(LocalTime fimCir) {
+	public void setFimCir(String fimCir) {
 		this.fimCir = fimCir;
 	}
-	public LocalTime getSaidaPrev() {
+	public String getSaidaPrev() {
 		return saidaPrev;
 	}
-	public void setSaidaPrev(LocalTime saidaPrev) {
+	public void setSaidaPrev(String saidaPrev) {
 		this.saidaPrev = saidaPrev;
 	}
 

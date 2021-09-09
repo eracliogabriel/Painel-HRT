@@ -1,7 +1,11 @@
 <%@page import="MODEL.Dados"%>
 <%@page import="DAO.DadosDAO"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@page import="java.util.List"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@ page import="java.sql.Connection"%>
+<%@ page import="DB.Conexao"%>
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +16,9 @@
 </head>
 <body>
 <%
-Dados d = new Dados();
+DadosDAO dao = new DadosDAO();
+List<Dados> ls = dao.listarDados();
+if (ls.size() > 0) {
 %>
 	<script>
 		var pacientes = localStorage.getItem('ls-tabela');
@@ -78,25 +84,27 @@ Dados d = new Dados();
 			document.getElementById("saida-previsto").value = p.saidaPrev;
 
 		}
+		
+
 
 		function status(status) {
 			switch (status) {
-			case 'operatorio':
+			case 'Pré-Operatório':
 				return {
 					label : 'Pré-Operatório',
 					cor : '#fbd972'
 				};
-			case 'sala-cirurgica':
+			case 'Em sala cirúrgica':
 				return {
 					label : 'Em sala cirúrgica',
 					cor : '#fd5766'
 				};
-			case 'recuperacao':
+			case 'Em recuperação':
 				return {
 					label : 'Em recuperação',
 					cor : '#89e89f'
 				};
-			case 'transferido':
+			case 'Transferído':
 				return {
 					label : 'Transferído',
 					cor : '#b8daff'
@@ -146,20 +154,20 @@ Dados d = new Dados();
 		<br>
 		<h2>Gerenciar Painel dos Paciente no Centro Cirúrgico</h2>
 		<form action="painelServlet" name="form-paciente" id="form-paciente">
-			<input type="hidden" id="id" name="id" value="<%=d.getId()%>">
+			<input type="hidden" id="id" name="id">
 			<div class="form-row">
 				<div class="form-group col-md-6">
 					<label for="nome">Nome Paciente:</label> <input type="text"
 						class="form-control" id="nome_paciente" placeholder="Nome do Paciente"
-						name="nome_paciente" value="<%=d.getNomeCompleto()%>">
+						name="nome_paciente">
 				</div>
 				<div class="form-group col-md-3">
 					<label for="nome">Status:</label> <select name="status" id="status"
 						class="form-control">
-						<option value="operatorio">Pré-Operatório</option>
-						<option value="sala-cirurgica">Em sala cirúrgica</option>
-						<option value="recuperacao">Em recuperação</option>
-						<option value="transferido">Transferído</option>
+						<option value="Pré-Operatório">Pré-Operatório</option>
+						<option value="Em sala cirúrgica">Em sala cirúrgica</option>
+						<option value="Em recuperação">Em recuperação</option>
+						<option value="Transferído">Transferído</option>
 					</select>
 				</div>
 				<div class="form-group col-md-3">
@@ -170,27 +178,27 @@ Dados d = new Dados();
 			</div>
 			<div class="form-row">
 				<div class="form-group  col-md-3">
-					<label for="inicio-previsto">Início Prevísto:</label> <input
-						type="time" class="form-control" id="inicio-previsto"
-						name="inicio-previsto" size="20">
+					<label for="inicio_previsto">Início Prevísto:</label> <input
+						type="time" class="form-control" id="inicio_previsto"
+						name="inicio_previsto" size="20">
 				</div>
 				<div class="form-group  col-md-3">
-					<label for="inicio-previsto">Início Cirurgia:</label> <input
-						type="time" class="form-control" id="inicio-cirurgia"
-						name="inicio-previsto" size="20">
+					<label for="inicio_cirurgia">Início Cirurgia:</label> <input
+						type="time" class="form-control" id="inicio_cirurgia"
+						name="inicio_cirurgia" size="20">
 				</div>
 				<div class="form-group  col-md-3">
-					<label for="inicio-previsto">Fim daCirurgia:</label> <input
-						type="time" class="form-control" id="fim-cirurgia"
-						name="inicio-previsto" size="20">
+					<label for="fim_cirurgia">Fim daCirurgia:</label> <input
+						type="time" class="form-control" id="fim_cirurgia"
+						name="fim_cirurgia" size="20">
 				</div>
 				<div class="form-group  col-md-3">
-					<label for="inicio-previsto">Saída Prevísto:</label> <input
-						type="time" class="form-control" id="saida-previsto"
-						name="inicio-previsto" size="20">
+					<label for="saida_prevista">Saída Prevísto:</label> <input
+						type="time" class="form-control" id="saida_prevista"
+						name="saida_prevista" size="20">
 				</div>
 			</div>
-			<button type="button" class="btn btn-secondary" onclick="limpaForm()">Novo</button>
+			<button type="reset" class="btn btn-secondary" onclick="limpaForm()">Novo</button>
 			<button type="submit" class="btn btn-primary" onclick="gravar(this)">Gravar</button>
 			<button type="button" class="btn btn-danger" onclick="apagar()">Apagar</button>
 		</form>
@@ -199,22 +207,39 @@ Dados d = new Dados();
 		<table class="table table-hover">
 			<thead>
 				<tr>
+					<th width="20%">ID</th>
 					<th width="40%">Nome do Paciente</th>
 					<th width="30%">Status</th>
+					<th width="20%">Local</th>
 					<th width="10%">Início Prevísto</th>
 					<th width="10%">Início da Cirurgia</th>
 					<th width="10%">Fim da Cirurgia</th>
 					<th width="10%">Saída Prevista</th>
 				</tr>
+				<%
+				for (Dados d : ls) {
+				%>
 				<tr>
+				<td><%=d.getId() %></td>
 				<td><%=d.getNomeCompleto()%></td>
+				<td><%=d.getStatus() %></td>
+				<td><%=d.getLocal() %></td>
+				<td><%=d.getInicioPrev() %></td>
+				<td><%=d.getInicioCir() %></td>
+				<td><%=d.getFimCir() %></td>
+				<td><%=d.getSaidaPrev() %></td>
 				</tr>
+				<%
+				}
+				%>
 			</thead>
 			<tbody id="corpo-tabela" style="cursor: pointer;">
 
 			</tbody>
 		</table>
-
+<%
+}
+%>
 		<script type="text/javascript">
 			var tabela = localStorage.getItem('corpo-tabela');
 			document.getElementById("corpo-tabela").innerHTML = tabela;

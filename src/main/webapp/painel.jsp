@@ -1,3 +1,10 @@
+<%@page import="MODEL.Dados"%>
+<%@page import="DAO.DadosDAO"%>
+<%@page import="java.util.List"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@ page import="java.sql.Connection"%>
+<%@ page import="DB.Conexao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -9,7 +16,11 @@
 	href="bootstrap.min.css">
 </head>
 <body>
-
+<%
+DadosDAO dao = new DadosDAO();
+List<Dados> ls = dao.listarDados();
+if (ls.size() > 0) {
+%>
 	<p>
 		<img
 			src="Bandeira_do_Distrito_Federal_Brasil.png"
@@ -35,16 +46,34 @@
 			<tr>
 				<th width="40%">Nome do paciente</th>
 				<th width="20%">Status</th>
+				<th width="20%">Local</th>
 				<th width="10%">Início Prevísto</th>
 				<th width="10%">Início da Cirurgia</th>
 				<th width="10%">Fim da Cirurgia</th>
 				<th width="10%">Saída Prevista</th>
 			</tr>
+			<%
+				for (Dados d : ls) {
+				%>
+				<tr>
+				<td><%=d.getNomeCompleto()%></td>
+				<td><%=d.getStatus() %></td>
+				<td><%=d.getLocal() %></td>
+				<td><%=d.getInicioPrev() %></td>
+				<td><%=d.getInicioCir() %></td>
+				<td><%=d.getFimCir() %></td>
+				<td><%=d.getSaidaPrev() %></td>
+				</tr>
+				<%
+				}
+				%>
 		</thead>
 		<tbody id="corpo-tabela" class="font-weight-bold text-monospace">
 
 		</tbody>
 	</table>
-
+<%
+}
+%>
 </body>
 </html>

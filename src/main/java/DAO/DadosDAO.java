@@ -35,10 +35,15 @@ public class DadosDAO {
 		
 		try {
 			Connection cont = Conexao.conectar();
-			String SQL = "insert into painel (nome_paciente) values (?)"; 
+			String SQL = "insert into painel (nome_paciente, status, local, inicio_previsto, inicio_cirurgia, fim_cirurgia, saida_prevista) values (?,?,?,?,?,?,?)"; 
 			PreparedStatement ps = cont.prepareStatement(SQL);
 			ps.setString(1, dados.getNomeCompleto());
-
+			ps.setString(2, dados.getStatus());
+			ps.setString(3, dados.getLocal());
+			ps.setString(4, dados.getInicioPrev());
+			ps.setString(5, dados.getInicioCir());
+			ps.setString(6, dados.getFimCir());
+			ps.setString(7, dados.getSaidaPrev());
 			
 			ps.execute();
 			ps.close();
@@ -55,12 +60,18 @@ public class DadosDAO {
 		List<Dados> ls = new ArrayList<>();
 		try {
 			Connection cont = Conexao.conectar();
-			PreparedStatement pst = cont.prepareStatement("select * from pessoas order by id");
+			PreparedStatement pst = cont.prepareStatement("select * from painel order by id");
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
 				Dados d = new Dados();
-				d.setNomeCompleto(rs.getString("nome_completo"));
+				d.setId(rs.getLong("id"));
+				d.setNomeCompleto(rs.getString("nome_paciente"));
 				d.setStatus(rs.getString("status"));
+				d.setLocal(rs.getString("local"));
+				d.setInicioPrev(rs.getString("inicio_previsto"));
+				d.setInicioCir(rs.getString("inicio_cirurgia"));
+				d.setFimCir(rs.getString("fim_cirurgia"));
+				d.setSaidaPrev(rs.getString("saida_prevista"));
 
 				ls.add(d);
 			}
