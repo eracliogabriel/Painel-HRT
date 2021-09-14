@@ -16,7 +16,6 @@ public class PainelServlet extends HttpServlet {
 	protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		
 		Dados objD = new Dados();
-
 		objD.setNomeCompleto(req.getParameter("nome_paciente"));
 		objD.setStatus(req.getParameter("status"));
 		objD.setLocal(req.getParameter("local"));
@@ -24,7 +23,6 @@ public class PainelServlet extends HttpServlet {
 		objD.setInicioCir(req.getParameter("inicio_cirurgia"));
 		objD.setFimCir(req.getParameter("fim_cirurgia"));
 		objD.setSaidaPrev(req.getParameter("saida_prevista"));
-
 		
 		DadosDAO objDao = new DadosDAO();
 		

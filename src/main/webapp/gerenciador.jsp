@@ -17,6 +17,7 @@
 <body>
 <%
 DadosDAO dao = new DadosDAO();
+Dados dados = new Dados();
 List<Dados> ls = dao.listarDados();
 if (ls.size() > 0) {
 %>
@@ -40,10 +41,10 @@ if (ls.size() > 0) {
 
 			var vStatus = document.getElementById("status").value;
 			var vLocal = document.getElementById("local").value;
-			var vIniPrevisto = document.getElementById("inicio-previsto").value;
-			var vIniCirurgia = document.getElementById("inicio-cirurgia").value;
-			var vFimCirurgia = document.getElementById("fim-cirurgia").value;
-			var vSaidaPrev = document.getElementById("saida-previsto").value;
+			var vIniPrevisto = document.getElementById("inicio_previsto").value;
+			var vIniCirurgia = document.getElementById("inicio_cirurgia").value;
+			var vFimCirurgia = document.getElementById("fim_cirurgia").value;
+			var vSaidaPrev = document.getElementById("saida_previsto").value;
 
 			if (vLocal != '') {
 				vLocal = '(' + vLocal + ')';
@@ -74,14 +75,14 @@ if (ls.size() > 0) {
 
 		function preparaEdicao(id) {
 			var p = pacientes[id];
-			document.getElementById("id").value = id;
-			document.getElementById("nome").value = p.nome;
-			document.getElementById("status").value = p.status;
-			document.getElementById("local").value = p.local.replace("(","").replace(")","");
-			document.getElementById("inicio-previsto").value = p.iniPrevisto;
-			document.getElementById("inicio-cirurgia").value = p.iniCirurgia;
-			document.getElementById("fim-cirurgia").value = p.fimCirurgia;
-			document.getElementById("saida-previsto").value = p.saidaPrev;
+			document.getElementById("id").value = '<%=dados.getId()%>';
+			document.getElementById("nome").value = '<%=dados.getNomeCompleto()%>';
+			document.getElementById("status").value = '<%=dados.getStatus()%>';
+			document.getElementById("local").value = '<%=dados.getLocal()%>.replace("(","").replace(")","")';
+			document.getElementById("inicio-previsto").value = '<%=dados.getInicioPrev()%>';
+			document.getElementById("inicio-cirurgia").value = '<%=dados.getInicioCir()%>';
+			document.getElementById("fim-cirurgia").value = '<%=dados.getFimCir()%>';
+			document.getElementById("saida-previsto").value = '<%=dados.getSaidaPrev()%>';
 
 		}
 		
@@ -138,7 +139,7 @@ if (ls.size() > 0) {
 		}
 
 		function apagar() {
-			var vId = document.getElementById("id").value;
+			var vId = document.getElementById("id").value='<%=dados.getId()%>';
 			if (vId != '') {
 				var save = confirm("Tem certeza que quer apagar esse registro?");
 				if (save) {
@@ -162,7 +163,7 @@ if (ls.size() > 0) {
 						name="nome_paciente">
 				</div>
 				<div class="form-group col-md-3">
-					<label for="nome">Status:</label> <select name="status" id="status"
+					<label for="status">Status:</label> <select name="status" id="status"
 						class="form-control">
 						<option value="Pré-Operatório">Pré-Operatório</option>
 						<option value="Em sala cirúrgica">Em sala cirúrgica</option>
@@ -200,7 +201,7 @@ if (ls.size() > 0) {
 			</div>
 			<button type="reset" class="btn btn-secondary" onclick="limpaForm()">Novo</button>
 			<button type="submit" class="btn btn-primary" onclick="gravar(this)">Gravar</button>
-			<button type="button" class="btn btn-danger" onclick="apagar()">Apagar</button>
+			<button type="button" class="btn btn-danger" onclick="return confirm('Você realmente quer apagar esse registro?');" href="painelServlet?id=<%=dados.getId()%>&acao=apagar">Apagar</button>
 		</form>
 
 		<br>
