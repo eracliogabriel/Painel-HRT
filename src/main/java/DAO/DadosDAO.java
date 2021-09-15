@@ -152,6 +152,45 @@ public class DadosDAO {
 		}
 		return false;
 	}
+	public Dados validarLogin(String email, String senha) {
+		Dados d = new Dados();
+		try {
+			Connection cont = Conexao.conectar();
+			PreparedStatement pst = cont.prepareStatement(
+					"select * from usuario WHERE email = '" + email + "' AND senha = '" + senha + "'");
+			ResultSet rs = pst.executeQuery();
+			rs.next();
+			d.setId(rs.getLong("id"));
+			cont.close();
+			d = getPessoa(d.getId());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return d;
+
+	}
+	
+	public boolean alterarSenha(Dados objD) {
+	
+		try {
+			Connection cont = Conexao.conectar();
+
+			String sql = " update usuario  set senha = ? where id = ?";
+
+			PreparedStatement pst = cont.prepareStatement(sql);
+			pst.setString(1, objD.getSenha());
+			pst.setLong(2, objD.getId());
+
+			pst.execute();
+			pst.close();
+			cont.close();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 
 
 

@@ -76,6 +76,22 @@ public class Dados {
 	public void setSaidaPrev(String saidaPrev) {
 		this.saidaPrev = saidaPrev;
 	}
-
+	
+	public String Cor() {
+	switch (status) {
+	case "Pré-Operatório":
+		return "#fbd972";
+		
+	case "Em sala cirúrgica":
+		return "#fd5766";
+		
+	case "Em recuperação":
+		return "#89e89f";
+				
+	case "Transferído":
+		return "#b8daff";
+		}
+	return "";
+	
+	}
 }
-

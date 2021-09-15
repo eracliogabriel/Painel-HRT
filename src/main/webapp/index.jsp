@@ -8,8 +8,8 @@
 </head>
 <body>
 	<br>
-	<a href="gerenciador.jsp">Gerenciar lista de pacientes</a>
+	<a href="login.jsp">ACESSE para Gerenciar Lista de pacientes</a>
 	<br>
-	<a href="painel.jsp">Lista de pacientes</a>
+	<a href="painel.jsp">Visualizar Lista de pacientes</a>
 </body>
 </html>

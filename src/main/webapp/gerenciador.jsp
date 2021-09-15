@@ -15,12 +15,12 @@
 <title>GERENCIADOR</title>
 </head>
 <body>
-<%
-DadosDAO dao = new DadosDAO();
-Dados dados = new Dados();
-List<Dados> ls = dao.listarDados();
-if (ls.size() > 0) {
-%>
+				<%
+			DadosDAO dao = new DadosDAO();
+			Dados dados = new Dados();
+			List<Dados> ls = dao.listarDados();
+				if (ls.size() > 0) {
+			%>
 	<script>
 		var pacientes = localStorage.getItem('ls-tabela');
 		
@@ -33,7 +33,7 @@ if (ls.size() > 0) {
 		function gravar() {
 
 			var vId = document.getElementById("id").value;
-			var vNome = document.getElementById("nome").value.toUpperCase();	
+			var vNome = document.getElementById("nome_paciente").value.toUpperCase();	
 			if (vNome == '') {
 				alert('O Nome do Paciente é obrigatório.');
 				return false;
@@ -44,12 +44,9 @@ if (ls.size() > 0) {
 			var vIniPrevisto = document.getElementById("inicio_previsto").value;
 			var vIniCirurgia = document.getElementById("inicio_cirurgia").value;
 			var vFimCirurgia = document.getElementById("fim_cirurgia").value;
-			var vSaidaPrev = document.getElementById("saida_previsto").value;
+			var vSaidaPrev = document.getElementById("saida_prevista").value;
 
-			if (vLocal != '') {
-				vLocal = '(' + vLocal + ')';
-			}
-
+			
 			var save = confirm("Deseja Salvar as alterações?");
 			if (save) {
 
@@ -68,21 +65,22 @@ if (ls.size() > 0) {
 				} else {
 					pacientes[vId] = paciente;
 				}
-				atualizarTabela();
-				limpaForm();
+				document.getElementById('form-paciente').submit();
 			}
+			return paciente;
 		}
 
-		function preparaEdicao(id) {
-			var p = pacientes[id];
-			document.getElementById("id").value = '<%=dados.getId()%>';
-			document.getElementById("nome").value = '<%=dados.getNomeCompleto()%>';
-			document.getElementById("status").value = '<%=dados.getStatus()%>';
-			document.getElementById("local").value = '<%=dados.getLocal()%>.replace("(","").replace(")","")';
-			document.getElementById("inicio-previsto").value = '<%=dados.getInicioPrev()%>';
-			document.getElementById("inicio-cirurgia").value = '<%=dados.getInicioCir()%>';
-			document.getElementById("fim-cirurgia").value = '<%=dados.getFimCir()%>';
-			document.getElementById("saida-previsto").value = '<%=dados.getSaidaPrev()%>';
+		function preparaEdicao(id, nome_paciente, status, local, inicio_previsto, inicio_cirurgia, fim_cirurgia, saida_prevista) {
+
+			document.getElementById("id").value;
+			document.getElementById("nome_paciente").value;
+			document.getElementById("status").value;
+			document.getElementById("local").value;
+			document.getElementById("inicio_previsto").value;
+			document.getElementById("inicio_cirurgia").value;
+			document.getElementById("fim_cirurgia").value;
+			document.getElementById("saida_prevista").value;
+		
 
 		}
 		
@@ -113,39 +111,17 @@ if (ls.size() > 0) {
 			}
 		}
 
-		function atualizarTabela() {
-			var tabela = "";
-
-			for (i in pacientes) {
-				var stts = status(pacientes[i].status);
-				tabela += '<tr onclick="preparaEdicao(' + i + ')">' + '<td>'
-						+ pacientes[i].nome + '</td>'
-						+ '<td style="background-color: '+stts.cor+';">'
-						+ stts.label + pacientes[i].local + '</td>' + '<td>'
-						+ pacientes[i].iniPrevisto + '</td>' + '<td>'
-						+ pacientes[i].iniCirurgia + '</td>' + '<td>'
-						+ pacientes[i].fimCirurgia + '</td>' + '<td>'
-						+ pacientes[i].saidaPrev + '</td>' + '</tr>';
-			}
-
-			document.getElementById("corpo-tabela").innerHTML = tabela;
-			localStorage.setItem('corpo-tabela', tabela);
-			localStorage.setItem('ls-tabela', JSON.stringify(pacientes));
-		}
-
 		function limpaForm() {
 			document.getElementById("id").value = '';
 			document.getElementById('form-paciente').reset();
 		}
 
 		function apagar() {
-			var vId = document.getElementById("id").value='<%=dados.getId()%>';
+			var vId = document.getElementById("id").value;
 			if (vId != '') {
+				vId
 				var save = confirm("Tem certeza que quer apagar esse registro?");
 				if (save) {
-					pacientes.splice(vId, 1);
-					atualizarTabela();
-					limpaForm();
 				}
 			}
 		}
@@ -189,7 +165,7 @@ if (ls.size() > 0) {
 						name="inicio_cirurgia" size="20">
 				</div>
 				<div class="form-group  col-md-3">
-					<label for="fim_cirurgia">Fim daCirurgia:</label> <input
+					<label for="fim_cirurgia">Fim da Cirurgia:</label> <input
 						type="time" class="form-control" id="fim_cirurgia"
 						name="fim_cirurgia" size="20">
 				</div>
@@ -201,8 +177,8 @@ if (ls.size() > 0) {
 			</div>
 			<button type="reset" class="btn btn-secondary" onclick="limpaForm()">Novo</button>
 			<button type="submit" class="btn btn-primary" onclick="gravar(this)">Gravar</button>
-			<button type="button" class="btn btn-danger" onclick="return confirm('Você realmente quer apagar esse registro?');" href="painelServlet?id=<%=dados.getId()%>&acao=apagar">Apagar</button>
-		</form>
+			<button type="button" class="btn btn-danger" onclick="apagar()">Apagar</button>
+			</form>
 
 		<br>
 		<table class="table table-hover">
@@ -217,34 +193,35 @@ if (ls.size() > 0) {
 					<th width="10%">Fim da Cirurgia</th>
 					<th width="10%">Saída Prevista</th>
 				</tr>
-				<%
-				for (Dados d : ls) {
-				%>
-				<tr>
-				<td><%=d.getId() %></td>
-				<td><%=d.getNomeCompleto()%></td>
-				<td><%=d.getStatus() %></td>
-				<td><%=d.getLocal() %></td>
-				<td><%=d.getInicioPrev() %></td>
-				<td><%=d.getInicioCir() %></td>
-				<td><%=d.getFimCir() %></td>
-				<td><%=d.getSaidaPrev() %></td>
-				</tr>
-				<%
-				}
-				%>
+<%
+for (Dados d : ls) {
+%>
+					<tr>
+						<td><%=d.getId() %></td>
+						<td><%=d.getNomeCompleto() %></td>
+ 						<td style="background-color: <%=d.Cor()%>"> <%=d.getStatus()%></td>
+ 						<td><%=d.getLocal() %></td>
+						<td><%=d.getInicioPrev()%></td>
+						<td><%=d.getInicioCir()%></td>
+						<td><%=d.getFimCir()%></td>
+						<td><%=d.getSaidaPrev()%></td>			
+					</tr>
+					<%
+					}
+					%>
+				
 			</thead>
 			<tbody id="corpo-tabela" style="cursor: pointer;">
-
+			
 			</tbody>
 		</table>
-<%
-}
-%>
+		<%
+				}
+		%>
 		<script type="text/javascript">
 			var tabela = localStorage.getItem('corpo-tabela');
 			document.getElementById("corpo-tabela").innerHTML = tabela;
-			
+	
 		</script>
 
 	</div>

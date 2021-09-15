@@ -57,7 +57,7 @@ if (ls.size() > 0) {
 				%>
 				<tr>
 				<td><%=d.getNomeCompleto()%></td>
-				<td><%=d.getStatus() %></td>
+				<td style="background-color: <%=d.Cor()%>"> <%=d.getStatus()%></td>
 				<td><%=d.getLocal() %></td>
 				<td><%=d.getInicioPrev() %></td>
 				<td><%=d.getInicioCir() %></td>
