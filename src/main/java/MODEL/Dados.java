@@ -5,10 +5,10 @@ public class Dados {
 	
 	//Atributos nomeados
 	private Long id;
-	private String email;
+	private String email = "";
 	private String senha;
 	private String nomeCompleto;
-	private String status;
+	private String status = "";
 	private String local;
 	private String inicioPrev;
 	private String inicioCir;

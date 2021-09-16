@@ -15,6 +15,7 @@
 <title>GERENCIADOR</title>
 </head>
 <body>
+	<%@ include file="menu.jsp"%>
 				<%
 			DadosDAO dao = new DadosDAO();
 			Dados dados = new Dados();
@@ -117,16 +118,27 @@
 		}
 
 		function apagar() {
-			var vId = document.getElementById("id").value;
+			var vId = document.getElementById("id").value='';
 			if (vId != '') {
 				vId
 				var save = confirm("Tem certeza que quer apagar esse registro?");
 				if (save) {
+					window.location = "painelServlet?id="+vId+"&acao=apagar";
 				}
 			}
 		}
 	</script>
+<%
+	Dados d1 = new Dados();
+	try {
+		long id = Long.parseLong(request.getParameter("id"));
+		//DadosDao dao = new PessoaDao();
+		d1 = dao.getPessoa(id);
 
+	} catch (Exception e) {
+	}
+	//out.print(id);
+	%>
 	<div class="container">
 		<br>
 		<h2>Gerenciar Painel dos Paciente no Centro Cirúrgico</h2>
@@ -135,7 +147,7 @@
 			<div class="form-row">
 				<div class="form-group col-md-6">
 					<label for="nome">Nome Paciente:</label> <input type="text"
-						class="form-control" id="nome_paciente" placeholder="Nome do Paciente"
+						class="form-control" id="nome_paciente" placeholder="Nome do Paciente" value="<%=d1.getNomeCompleto()%>"
 						name="nome_paciente">
 				</div>
 				<div class="form-group col-md-3">
@@ -149,7 +161,7 @@
 				</div>
 				<div class="form-group col-md-3">
 					<label for="local">Local:</label> <input type="text"
-						class="form-control" id="local" placeholder="Sala/Quarto"
+						class="form-control" value="<%=d1.getLocal()%>" id="local" placeholder="Sala/Quarto"
 						name="local">
 				</div>
 			</div>
@@ -157,29 +169,31 @@
 				<div class="form-group  col-md-3">
 					<label for="inicio_previsto">Início Prevísto:</label> <input
 						type="time" class="form-control" id="inicio_previsto"
-						name="inicio_previsto" size="20">
+						name="inicio_previsto" size="20" value="<%=d1.getInicioPrev()%>">
 				</div>
 				<div class="form-group  col-md-3">
 					<label for="inicio_cirurgia">Início Cirurgia:</label> <input
 						type="time" class="form-control" id="inicio_cirurgia"
-						name="inicio_cirurgia" size="20">
+						name="inicio_cirurgia" size="20" value="<%=d1.getInicioCir()%>">
 				</div>
 				<div class="form-group  col-md-3">
 					<label for="fim_cirurgia">Fim da Cirurgia:</label> <input
 						type="time" class="form-control" id="fim_cirurgia"
-						name="fim_cirurgia" size="20">
+						name="fim_cirurgia" size="20" value="<%=d1.getFimCir()%>">
 				</div>
 				<div class="form-group  col-md-3">
 					<label for="saida_prevista">Saída Prevísto:</label> <input
 						type="time" class="form-control" id="saida_prevista"
-						name="saida_prevista" size="20">
+						name="saida_prevista" size="20" value="<%=d1.getSaidaPrev()%>">
 				</div>
 			</div>
 			<button type="reset" class="btn btn-secondary" onclick="limpaForm()">Novo</button>
 			<button type="submit" class="btn btn-primary" onclick="gravar(this)">Gravar</button>
 			<button type="button" class="btn btn-danger" onclick="apagar()">Apagar</button>
 			</form>
-
+<script type="text/javascript">
+ 		document.getElementById("status").value='<%=d1.getStatus()%>';
+</script>
 		<br>
 		<table class="table table-hover">
 			<thead>
@@ -196,7 +210,7 @@
 <%
 for (Dados d : ls) {
 %>
-					<tr>
+					<tr onclick="window.location.href = 'gerenciador.jsp?id=<%=d.getId()%>'">
 						<td><%=d.getId() %></td>
 						<td><%=d.getNomeCompleto() %></td>
  						<td style="background-color: <%=d.Cor()%>"> <%=d.getStatus()%></td>
@@ -219,6 +233,7 @@ for (Dados d : ls) {
 				}
 		%>
 		<script type="text/javascript">
+<%-- 		document.getElementById("status").value='<%=d1.getStatus()%>'; --%>
 			var tabela = localStorage.getItem('corpo-tabela');
 			document.getElementById("corpo-tabela").innerHTML = tabela;
 	

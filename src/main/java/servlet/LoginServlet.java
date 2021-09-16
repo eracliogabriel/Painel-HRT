@@ -8,15 +8,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import DAO.DadosDAO;
-import MODEL.Dados;
 
 @WebServlet("/loginservlet")
 public class LoginServlet extends HttpServlet {
 
 	protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		String loginV = "Administrador";
-		String senhaV = "admin";
+		String usuarioProv = "Administrador";
+		String senhaProv = "admin";
 
 		String email = req.getParameter("email");
 		String senha = req.getParameter("senha");
@@ -24,10 +22,10 @@ public class LoginServlet extends HttpServlet {
 		PrintWriter saida = res.getWriter();
 		saida.println("<html>");
 
-		if(email.equals(loginV) && senha.equals(senhaV)) {
+		if(email.equals(usuarioProv) && senha.equals(senhaProv)) {
 			res.sendRedirect("gerenciador.jsp");	
 		}else {
-			saida.println("Acesso Reprovado");	
+			saida.println("Login ou Senha incorreta");	
 		}
 
 		saida.println("</html>");
